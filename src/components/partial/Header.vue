@@ -17,30 +17,6 @@
                 </div>
                 <nav id="bs-navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown" v-if="account&&account.name">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false">
-                                <account-image :size="8" :account="account.name"></account-image>&nbsp;{{account.name}}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <router-link :to="{path:'/account/'+account.name}">
-                                        <i class="fa fa-user"></i>&nbsp;{{$t('header.profile')}}
-                                    </router-link>
-                                </li>
-                                <li @click="logout">
-                                    <a href="#">
-                                        <i class="fa fa-sign-out-alt"></i>&nbsp;{{$t('header.logout')}}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li v-if="!(account&&account.name)">
-                            <a href="javascript:;" @click="login">{{$t('header.login')}}</a>
-                        </li>
-                        <li><a href="#modal-api" data-toggle="modal">API</a></li>
-                        <!--<li><router-link :to="{path:'/holdrank/1'}" @click.native="clearInput">排行</router-link></li>-->
                         <li><a href="#modal-about" data-toggle="modal">{{$t('header.about')}}</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"

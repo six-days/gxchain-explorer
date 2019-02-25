@@ -7,13 +7,20 @@ import Immutable from 'immutable';
 
 const baseURL = location.host;
 
-export const fetch_block = (block_height) => {
-    return Vue.http.get(`//${baseURL}/api/block/${block_height}`, {
-        responseType: 'json'
-    });
+export const fetch_transaction = (symbole, address, pageNum) => {
+    return Vue.http.post('/api.php/getTokenRecords', {
+        symbole: symbole,
+        address: address,
+        pageNum: pageNum});
 };
 
-export const fetch_transaction = (tx_id) => {
+export const fetch_balance = (symbole, address) => {
+    return Vue.http.post('/api.php/getBalance', {
+        symbole: symbole,
+        address: address});
+};
+
+export const fetch_transaction_old = (tx_id) => {
     return Vue.http.get(`//${baseURL}/api/transaction/${tx_id}`, {
         responseType: 'json'
     });

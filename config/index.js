@@ -40,15 +40,15 @@ module.exports = {
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-        witnesses: [
-            'wss://testnet.gxchain.org'
-            // 'wss://node5.gxb.io',
-            // 'wss://node8.gxb.io',
-            // 'wss://node11.gxb.io',
-            // 'wss://node15.gxb.io',
-            // 'wss://node16.gxb.io',
-            // 'wss://node17.gxb.io'
-        ],
+        proxyTable: {
+            '/api.php': {
+                target: 'http://192.168.1.168/api.php/',
+                changeOrigin: true,
+                pathRewrite: {
+                '^/api.php': ''
+                }
+            }
+        },
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README
         // (https://github.com/webpack/css-loader#sourcemaps)

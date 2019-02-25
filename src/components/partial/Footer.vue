@@ -3,8 +3,8 @@
         <div class="footer-outer">
             <div class="footer-inner">
                 <div class="text-center">
-                    @2017 - 2018 Powered by GXChain &nbsp;<a target='_blank' nofollow
-                                                  href="https://github.com/gxchain/gxb-explorer"><span
+                    @2018 - 2019 Powered by sixdays &nbsp;<a target='_blank' nofollow
+                                                  href="https://open.onethingcloud.com/"><span
                         class="fa fa-lg fa-github"></span></a>
                 </div>
             </div>

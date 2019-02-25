@@ -4,12 +4,14 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
-    keywords: ''
+    keywords: '',
+    coinSymbol: ''
 };
 
 const mutations = {
     setKeywords (state, payload) {
         state.keywords = payload.keywords;
+        state.coinSymbol = payload.coinSymbol;
     }
 };
 
@@ -20,7 +22,8 @@ const actions = {
 };
 
 const getters = {
-    keywords: state => state.keywords
+    keywords: state => state.keywords,
+    coinSymbol: state => state.coinSymbol
 };
 
 export default new Vuex.Store({

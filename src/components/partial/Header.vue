@@ -11,9 +11,6 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <!--<router-link :to="{path:'/'}" class="navbar-brand">-->
-                    <!--<img height="28.5px" src="/static/exploer-logo.png" v-on:click="clearInput"/>-->
-                    <!--</router-link>-->
                 </div>
                 <nav id="bs-navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -26,15 +23,15 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li @click="switchLanguage('zh')"><a href="javascript:;">
+                                <li ><a href="javascript:;">
                                     <img class="flagimg"
                                          :src="flagImg['zh']">中文</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <li @click="switchLanguage('en')"><a href="javascript:;">
+                                <!-- <li @click="switchLanguage('en')"><a href="javascript:;">
                                     <img class="flagimg"
                                          :src="flagImg['en']">English</a>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                     </ul>
@@ -46,69 +43,55 @@
                 <div class="col-xs-12">
                     <p class="text-center">
                         <router-link :to="{path:'/'}">
-                            <img height="40px" alt="logo-gxchain" src="/static/exploer-logo.png"
+                            <img height="60px" alt="logo-thunderchain" src="/static/exploer-logo.png"
                                  v-on:click="clearInput"/>
                         </router-link>
                     </p>
                     <div class="search-wraper" role="search">
-                        <div class="form-group">
-                            <input @change="eventChanged" v-model="search" class="form-control search clearable"
-                                   :placeholder="$t('header.search')" autocomplete="off" autofocus=""
-                                   tabindex="0" autocorrect="off" autocapitalize="off" spellcheck="false">
-                            <i class="gxicon gxicon-search"></i>
-                        </div>
+                        <div class="input-group">
+                             <div class="input-group-btn">
+                                  <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                          {{coinName}}({{symbol}})&nbsp;<span class="caret"></span>
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                    <li v-for="item in assets" v-on:click="chooseChanged(item.symbol, item.name)"><a href="javascript:void(0);">{{item.name}}({{item.symbol}})</a></li>
+                                  </ul>
+                              </div>
+                        <input type="text" class="form-control" placeholder="在此输入链克口袋地址" autocomplete="off" v-model="search"/>
+                        <span class="input-group-btn"><!--不换行，与相邻元素内联-->
+                              <button class="btn btn-primary" v-on:click="eventChanged">搜索</button>
+                        </span>
+                     </div>
                     </div>
                 </div>
             </div>
-            <!--<p class="news">-->
-                <!--<a href="https://mp.weixin.qq.com/s/GS2EdzEjLBDZQ0O92Vewbw" target="_blank">-->
-                    <!--<span class="fa fa-fire"></span>{{$t('header.trustnode_election')}}-->
-                <!--</a>-->
-            <!--</p>-->
         </div>
     </header>
 
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
-    import { set_item } from '@/services/CommonService';
-    import AccountImage from './AccountImage';
-    import GScatterJS from 'gscatterjs-core';
+    import { mapActions } from 'vuex';
 
     export default {
-        components: {AccountImage},
         data () {
             return {
                 account: null,
                 connected: false,
                 gscatter: null,
+                symbol: 'wkc',
+                coinName: '链克',
                 search: '',
                 flagImg: {
                     'zh': require('../../../static/language-dropdown/img/CN.png'),
                     'en': require('../../../static/language-dropdown/img/US.png')
-                }
+                },
+                assets: [{'symbol': 'wkc', 'name': '链克'},
+                    {'symbol': 'hgbc', 'name': '碱基'},
+                    {'symbol': 'lzt', 'name': '懒钻'},
+                    {'symbol': 'cjf', 'name': '超积分'}
+                ]
             };
-        },
-        mounted () {
-            GScatterJS.gscatter.connect(location.host).then((connected) => {
-                if (!connected) return false;
-                this.connected = connected;
-                this.gscatter = GScatterJS.gscatter;
-                // require version, if user's plugin is less than the version, when operate, plugin will prompt a tips
-                // this.gscatter.requireVersion('9.9.9');
-                // when user not login, you could use api which not need identity, like generateKey
-                this.gxc = this.gscatter.gxc(process.env.network);
-                // if identity exist, means user has authorize the website and already unlock, you could display user info then
-                if (this.gscatter.identity) {
-                    this.account = this.gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
-                }
-            });
-        },
-        computed: {
-            ...mapGetters({
-                keywords: 'keywords'
-            })
         },
         watch: {
             'keywords' () {
@@ -122,38 +105,14 @@
                 setKeywords: 'setKeywords'
             }),
             eventChanged () {
-                this.search = this.search.replace(/(^\s*)|(\s*$)/g, '');
-                this.setKeywords({keywords: this.search});
+                this.setKeywords({keywords: this.search, coinSymbol: this.symbol});
             },
-            switchLanguage (locale) {
-                this._i18n.locale = locale;
-                set_item('locale', locale);
+            chooseChanged (choose, name) {
+                this.symbol = choose;
+                this.coinName = name;
             },
             clearInput () {
-                this.setKeywords({keywords: ''});
-            },
-            login () {
-                if (!GScatterJS.gscatter.isExtension) {
-                    var flag = confirm(this.$t('header.download'));
-                    if (flag) {
-                        window.open('https://gxchain.github.io/GScatter/arch/guide/');
-                    }
-                } else {
-                    this.gscatter.suggestNetwork(process.env.network).then(() => {
-                        console.log(arguments);
-                        this.gscatter.getIdentity({accounts: [process.env.network]}).then(() => {
-                            console.log(arguments);
-                            this.account = this.gscatter.identity.accounts.find(x => x.blockchain === 'gxc');
-                        });
-                    }).catch(ex => {
-                        console.error('login failed:', ex);
-                    });
-                }
-            },
-            logout () {
-                this.gscatter.forgetIdentity().then(() => {
-                    this.account = null;
-                });
+                this.setKeywords({keywords: '', coinSymbol: ''});
             }
         }
     };

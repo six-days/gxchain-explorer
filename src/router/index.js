@@ -5,7 +5,6 @@ import Block from '@/components/Block';
 import Transaction from '@/components/Transaction';
 import Account from '@/components/Account';
 import Asset from '@/components/Asset';
-import connect from '@/common/connect';
 import Holdrank from '@/components/Holdrank';
 
 Vue.use(Router);
@@ -45,10 +44,6 @@ const router = new Router({
         }
 
     ]
-});
-
-router.beforeEach((to, from, next) => {
-    connect(next);
 });
 
 export default router;

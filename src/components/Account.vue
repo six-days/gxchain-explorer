@@ -2,267 +2,48 @@
     <div class="container">
         <Loading v-show="loading"></Loading>
         <section v-if="account_info&&account_info.id" v-show="!loading">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <span class="fa fa-fw fa-address-card"></span> {{$t('account.basic.title')}}
-                            <a class="pull-right"
-                               :href="'https://wallet.gxb.io/#/account/'+account_info.name+'/overview'"
-                               target="_blank">{{$t('account.basic.more')}}</a>
-                        </div>
-                        <div class="panel-body no-padding">
-                            <div class="table-responsive">
-                                <table class="table table-striped no-margin">
-                                    <tbody>
-                                    <tr>
-                                        <th width="220px">{{$t('account.basic.account_name')}}</th>
-                                        <td>{{account_info.name}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{$t('account.basic.account_id')}}</th>
-                                        <td>{{account_info.id}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{$t('account.basic.referrer_name')}}</th>
-                                        <td>
-                                            <router-link :to="{path:'/account/'+account_info.referrer_name}">
-                                                {{account_info.referrer_name}}({{account_info.referrer}})
-                                            </router-link>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{$t('account.basic.membership')}}</th>
-                                        <td>
-                                            <div v-html="account_type"></div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{asset.symbol}}
+                    </div>
+                    <div class="panel-body">
+                        <p>{{asset.description}}</p>
                     </div>
                 </div>
             </div>
+        </div>
             <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <span class="fas fa-gavel"></span>&nbsp;{{$t('account.permissions.title')}}
-                        </div>
-                        <div class="panel-body no-padding">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped no-margin">
-                                    <tbody>
-                                    <tr class="active">
-                                        <th width="80%"><span
-                                                class="fa fa-lock">&nbsp;{{$t('account.permissions.active')}}</span>
-                                        </th>
-                                        <th>
-                                            {{$t('account.permissions.threshold')}}({{account_info.active.weight_threshold}})
-                                        </th>
-                                    </tr>
-                                    <tr v-for="auth in account_info.active.key_auths">
-                                        <td class="overflow-wrap">{{auth[0]}}</td>
-                                        <td>{{auth[1]}}</td>
-                                    </tr>
-                                    <tr class="active">
-                                        <th><span class="fa fa-lock">&nbsp;{{$t('account.permissions.owner')}}</span>
-                                        </th>
-                                        <th>
-                                            {{$t('account.permissions.threshold')}}({{account_info.owner.weight_threshold}})
-                                        </th>
-                                    </tr>
-                                    <tr v-for="auth in account_info.owner.key_auths">
-                                        <td class="overflow-wrap">{{auth[0]}}</td>
-                                        <td>{{auth[1]}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <span class="fa fa-fw fa-money-check"></span>&nbsp;{{$t('account.balances.title')}}
-                        </div>
-                        <div class="panel-body no-padding">
-                            <table class="table table-striped no-margin">
-                                <thead>
-                                <tr>
-                                    <th>{{$t('account.balances.asset')}}</th>
-                                    <th align="right">
-                                        <div class="text-right">{{$t('account.balances.balance')}}</div>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="asset in account_info.balances" :key="asset.symbol">
-                                    <th>{{asset.symbol}}</th>
-                                    <td align="right">{{asset.amount}}</td>
-                                </tr>
-                                <tr v-if="account_info&&account_info.locked_balances.length>0" key="locked">
-                                    <th class="color-warning">{{$t('account.locked_balance')}}</th>
-                                    <td align="right">{{account_info.locked_balances[0].amount.amount/100000|number(2)}}</td>
-                                </tr>
-                                <tr v-if="account_info&&account_info.pledge_balances.length>0" key="pledge">
-                                    <th class="color-warning">{{$t('account.pledge_balance')}}</th>
-                                    <td align="right">{{account_info.pledge_balances[0].amount.amount/100000|number(2)}}</td>
-                                </tr>
-                                <tr v-if="Object.keys(account_info.balances).length==0">
-                                    <td colspan="2">
-                                        <div class="gray text-center">
-                                            <small>{{$t('account.balances.empty')}}</small>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <!--ABI-->
-                <div class="col-md-6" v-if="is_contract_account">
-                    <div class="panel panel-default panel-abi">
-                        <div class="panel-heading">
-                            <span class="fas fa-angle-right"></span>&nbsp;{{$t('account.contract.abi.title')}}
-                        </div>
-                        <div class="panel-body no-padding">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li :class="{active:abi.type=='raw'}" @click="abi.type='raw'">
-                                    <a role="tab" href="javascriprt:;">ABI Raw</a>
-                                </li>
-                                <li :class="{active:abi.type=='action'}" @click="abi.type='action'">
-                                    <a role="tab" href="javascriprt:;">Actions</a>
-                                </li>
-                                <li :class="{active:abi.type=='table'}" @click="abi.type='table'">
-                                    <a role="tab" href="javascriprt:;">Tables</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane" :class="{active:abi.type=='raw'}">
-                                    <pre>{{JSON.stringify(account_info.abi,null,'  ')}}</pre>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" :class="{active:abi.type=='action'}">
-                                    <div class="table-responsive no-padding no-margin" style="border:none">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Payable</th>
-                                                <th>Define</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr v-for="action in account_info.abi.actions" :key="action.name">
-                                                <td>{{action.payable}}</td>
-                                                <td>{{getActionDefine(action.name)}}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" :class="{active:abi.type=='table'}">
-                                    <div class="panel panel-default panel-tables"
-                                         v-for="table in getTableDefine(account_info.abi.tables)">
-                                        <div class="panel-heading"><span class="fa fa-fw fa-list"></span> {{table.name}}
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th width="150">type</th>
-                                                    <th>field</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr v-for="field in table.fields" :key="field.name">
-                                                    <td>{{field.type}}</td>
-                                                    <td>{{field.name}}</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!--Code-->
-                <div class="col-md-6" v-if="is_contract_account">
+                <div class="col-md-6" >
                     <div class="panel panel-default panel-code">
                         <div class="panel-heading">
-                            <span class="fas fa-code"></span>&nbsp;{{$t('account.contract.code.title')}}
+                            <span class="fas fa-code"></span>&nbsp;合约代码
                         </div>
                         <div class="panel-body no-padding">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li :class="{active:code.type=='wast'}" @click="code.type='wast'">
-                                    <a role="tab" href="javascriprt:;">WAST</a>
-                                </li>
-                                <li :class="{active:code.type=='wasm'}" @click="code.type='wasm'">
-                                    <a role="tab" href="javascriprt:;">WASM</a>
-                                </li>
-                            </ul>
                             <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane" :class="{active:code.type=='wast'}">
-                                    <pre>{{this.code.wast}}</pre>
-                                </div>
-                                <div role="tabpanel" class="tab-pane wasm" :class="{active:code.type=='wasm'}">
-                                    <pre>{{account_info.code}}</pre>
-                                </div>
+                                <pre>var a = 1</pre>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!--Database-->
-            <div class="row">
-                <div class="col-md-12" v-if="is_contract_account">
-                    <div class="panel panel-default">
+                <!--ABI-->
+                <div class="col-md-6">
+                    <div class="panel panel-default panel-abi">
                         <div class="panel-heading">
-                            <span class="fas fa-database"></span>&nbsp;{{$t('account.contract.database.title')}}
-                            <select v-model="current_table.name">
-                                <option v-for="table in account_info.abi.tables" :value="table.name" :key="table.name">
-                                    {{table.name}}
-                                </option>
-                            </select>
-                            <a class="btn btn-sm btn-default" :class="{disabled:current_table.page===0}"
-                               @click=loadTableData(current_table.page-1)>
-                                <i class="fa fa-arrow-left"></i>
-                            </a>
-                            <a class="btn btn-sm btn-default" :class="{disabled:!current_table.hasMore}"
-                               @click="loadTableData(current_table.page+1)">
-                                <i class="fa fa-arrow-right"></i>
-                            </a>
+                            <span class="fas fa-angle-right"></span>&nbsp;合约ABI
                         </div>
                         <div class="panel-body no-padding">
-                            <div class="table-responsive no-margin">
-                                <table class="table table-bordered table-striped no-margin">
-                                    <thead>
-                                    <tr>
-                                        <th v-for="h in current_table.headers">{{h}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-if="current_table.data.length>0" v-for="row in current_table.data">
-                                        <td v-for="v in row">{{v}}</td>
-                                    </tr>
-                                    <tr v-if="current_table.data.length==0">
-                                        <td class="text-center" :colspan="current_table.headers.length">
-                                            <small>{{$t('account.contract.database.no_record')}}</small>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="tab-content">
+                                <pre>var a = 1</pre>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
+
             <!--Recent Transactions-->
             <div class="row">
                 <div class="col-md-12">
@@ -291,10 +72,7 @@
                 </div>
             </div>
         </section>
-        <div v-if="!account_info||!account_info.id" v-show="!loading">
-            <h4 class="page-header">{{$t('account.title')}}</h4>
-            <p class="null-tip">{{$t('account.empty')}}</p>
-        </div>
+
     </div>
 </template>
 
@@ -311,6 +89,12 @@
             return {
                 loading: true,
                 history_loading: true,
+                asset: {
+                    'symbol': 'wkc',
+                    'supply': '100000000',
+                    'description': '链克是迅雷链上的资产',
+                    'contract': '0xead0edd69c479f3a81c2f1b8b36de118c6db8486'
+                },
                 abi: {
                     type: 'raw'
                 },

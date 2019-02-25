@@ -1,196 +1,149 @@
 <template>
+
     <div class="container">
-        <Loading v-show="loading"></Loading>
-        <div class="row" v-if="asset&&asset.id" v-show="!loading">
+        <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-ranking"  v-if="rankings&&rankings.length>0">
                     <div class="panel-heading">
-                        {{asset.symbol}}-{{asset.id}}
-                    </div>
-                    <div class="panel-body">
-                        <p>{{asset.options.description&&JSON.parse(asset.options.description).main}}</p>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered no-margin">
-                                <tbody>
-                                <tr>
-                                    <th>
-                                        {{$t('asset.issuer')}}
-                                    </th>
-                                    <td>
-                                        <router-link :to="{path:'/account/'+asset.issuer.name}">
-                                            {{asset.issuer.name}}
-                                        </router-link>
-                                    </td>
-                                    <th>{{$t('asset.precision')}}</th>
-                                    <td>{{asset.precision}}</td>
-                                </tr>
-                                <tr>
-                                    <th>{{$t('asset.max_supply')}}</th>
-                                    <td>
-                                        {{asset.options.max_supply/Math.pow(10,asset.precision)|number(2)}}
-                                    </td>
-                                    <th>{{$t('asset.current_supply')}}</th>
-                                    <td>
-                                        {{asset.detail.current_supply/Math.pow(10,asset.precision)|number(2)}}
-                                        <router-link to="/account/gxb-foundation"
-                                                     v-if="asset.id == '1.3.1' && network.chainId =='4f7d07969c446f8342033acb3ab2ae5044cbe0fde93db02de75bd17fa8fd84b8'"
-                                                     class="fa fa-question-circle"
-                                                     data-toggle="tooltip"
-                                                     :title="$t('asset.gxc')">
-                                        </router-link>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default panel-ranking" v-if="rankings&&rankings.length>0">
-                    <div class="panel-heading">
-                        <span class="fa fa-fw gxicon gxicon-rank"></span>&nbsp;{{$t('index.ranking.title')}}
+                        <span class="fa fa-fw gxicon gxicon-rank"></span>&nbsp;账号余额：<span class="label label-danger">{{coinBalance}}&nbsp;{{coinSymbol}}</span>，共<span class="label label-info">{{totleSupply}}</span>条交易
                     </div>
                     <div class="pabel-body table-responsive no-padding">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th width="100">{{$t('index.ranking.number')}}</th>
-                                <th>{{$t('index.ranking.account')}}</th>
-                                <th class="text-right">{{$t('index.ranking.locked_balance')}}</th>
-                                <th class="text-right">{{$t('index.ranking.balance')}}</th>
-                                <th class="text-right">{{$t('index.ranking.total_balance')}}</th>
-                                <th class="text-right">{{$t('index.ranking.percent')}}</th>
+                                <th>序号</th>
+                                <th>交易地址</th>
+                                <th >类型</th>
+                                <th class="text-right">金额</th>
+                                <th >时间</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="(item,i) in rankings">
                                 <td>{{i+1}}</td>
                                 <td>
-                                    <account-image :size="8"
-                                                   :account="item.accountName"></account-image>
+                                    <img v-bind:src="'/static/'+coinSymbol+'-logo.png'" style="width: 18px;height: 18px;">
                                     &nbsp;
-                                    <router-link :to="{path:'/account/'+item.accountName}">
-                                        {{item.accountName}}
+                                    <router-link :to="{path:'/account/'+item.tradeAccount}">
+                                        {{item.tradeAccount}}
                                     </router-link>
                                 </td>
-                                <td align="right">
-                                    {{item.freezeAmount}}
+                                <td>
+                                <span data-toggle="tooltip" data-placement="bottom" :title="'收录区块信息 #' + item.blocknum" :class="tradeSymboleF(item.type).label">{{tradeSymboleF(item.type).title}}</span>
                                 </td>
                                 <td align="right">
-                                    {{item.amount}}
+                                    <span :class="tradeSymboleF(item.type).label">{{item.amount}}</span>
                                 </td>
-                                <td align="right">
-                                    {{item.totalAmount}}
+                                <td>
+                                    {{item.timestamp}}
                                 </td>
-                                <td align="right">{{(item.percent*100).toFixed(2)}}%</td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="footer" v-if="hasMore">
-                            <a href="javascript:;" @click="loadRankings(page+1)">
+                            <a href="javascript:;" @click="loadTransactions(page+1)">
                                 <i class="fa fa-angle-double-down"></i>
                             </a>
                         </div>
                     </div>
                 </div>
+                <div v-else v-show="!loading">
+                    <h4 class="page-header">交易记录</h4>
+                    <p class="null-tip">{{errormsg}}</p>
+                </div>
             </div>
         </div>
+
+        
     </div>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import AccountImage from './partial/AccountImage';
-    import filters from '../filters';
-
+    import { fetch_transaction, fetch_balance } from '@/services/CommonService';
     export default {
-        filters,
-        components: {
-            AccountImage
-        },
         data () {
             return {
                 loading: true,
-                asset: null,
                 page: 1,
                 hasMore: true,
+                totleSupply: 0,
                 rankings: [],
-                network: process.env.network
+                coinBalance: null,
+                errormsg: null
             };
         },
         methods: {
             ...mapActions({
                 setKeywords: 'setKeywords'
             }),
-            loadData () {
-                this.$http.get(`/api/asset/${this.keywords.toUpperCase()}`).then(resp => {
-                    let asset = resp.body;
-                    this.asset = asset;
-                    this.loading = false;
-                    this.loadRankings(1);
+            loadBalance () {
+                fetch_balance(this.coinSymbol, this.$route.params.asset_name)
+                .then(resp => {
+                    this.coinBalance = resp.body.data[0];
+                }).catch(ex => {
+                    console.error(ex);
                 });
             },
-            loadRankings (page) {
-                const pageSize = 40;
-                this.$http
-                .get(`${process.env.STA_SERVICE}/account/assetRankList`, {
-                    params: {
-                        symbol: this.keywords.toUpperCase(),
-                        pageNo: page,
-                        pageSize: pageSize
-                    }
-                })
+            loadTransactions (page) {
+                const pageSize = 10;
+                fetch_transaction(this.coinSymbol, this.$route.params.asset_name, page)
                 .then(resp => {
                     this.page = page;
-                    let assetInfo = this.asset;
-                    let currentSupply = assetInfo.detail.current_supply / Math.pow(10, assetInfo.precision);
-                    if (!resp.body || resp.body.length < pageSize) {
+                    this.totleSupply = resp.body.data.total;
+                    if (!resp.body.data || pageSize * page > this.totleSupply) {
                         this.hasMore = false;
                     }
-                    this.rankings = this.rankings.slice(0, (page - 1) * pageSize);
-                    this.rankings = this.rankings.concat(resp.body.map(item => {
-                        if (item.accountName === 'jwj168') {
-                            debugger; // eslint-disable-line
-                        }
-                        return {
-                            accountName: item.accountName,
-                            amount: filters.number(item.amount, assetInfo.precision),
-                            freezeAmount: filters.number(item.freezeAmount, assetInfo.precision),
-                            totalAmount: filters.number(item.totalAmount, assetInfo.precision),
-                            percent: filters.number((item.amount + item.freezeAmount) / currentSupply, assetInfo.precision)
-                        };
-                    }));
+                    if (resp.body.state !== 1 && resp.body.data.result !== []) {
+                        this.rankings = this.rankings.concat(resp.body.data.result);
+                    }
+                    this.errormsg = resp.body.msg;
+                    this.loading = false;
                 }).catch(ex => {
                     console.error(ex);
                 });
             }
         },
-        mounted () {
-            if (this.$route.params.asset_name !== this.keywords) {
-                this.setKeywords({keywords: this.$route.params.asset_name});
-            }
-            this.loadData();
-        },
-        updated () {
-            $('[data-toggle="tooltip"]').tooltip();
-        },
         watch: {
             keywords () {
                 this.loading = true;
-                this.asset = null;
-                this.loadData();
+                this.hasMore = true;
+                this.rankings = [];
+                this.loadBalance();
+                this.loadTransactions(1);
+            },
+            coinSymbol () {
+                this.loading = true;
+                this.hasMore = true;
+                this.rankings = [];
+                this.loadBalance();
+                this.loadTransactions(1);
             },
             '$route' () {
                 if (this.$route.params.asset_name !== this.keywords) {
                     this.loading = true;
-                    this.asset = null;
                     this.setKeywords({keywords: this.$route.params.asset_name});
                 }
             }
         },
         computed: {
             ...mapGetters({
-                keywords: 'keywords'
-            })
+                keywords: 'keywords',
+                coinSymbol: 'coinSymbol'
+            }),
+            tradeSymboleF (tradeType) {
+                return function (tradeType) {
+                    let tradeSymbole = null;
+                    if (tradeType === 1) {
+                        tradeSymbole = {label: 'label label-success', title: '转入'};
+                    } else if (tradeType === 0) {
+                        tradeSymbole = {label: 'label label-danger', title: '转出'};
+                    } else {
+                        tradeSymbole = {label: 'label label-primary', title: '其它'};
+                    }
+                    return tradeSymbole;
+                };
+            }
         }
     };
 </script>
@@ -201,7 +154,6 @@
         border-top: 1px solid #eee;
         font-size: 20px;
     }
-
     .panel-ranking .footer a {
         color: #999;
     }

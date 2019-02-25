@@ -1,4 +1,5 @@
 import '@/common/global';
+import '@/common/util';
 import Vue from 'vue';
 import App from './App';
 import router from '@/router';

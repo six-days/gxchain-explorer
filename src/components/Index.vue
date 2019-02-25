@@ -19,7 +19,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="asset in assets" :key="asset.id">
+                            <tr v-for="asset in coinList" :key="asset.id">
                                 <td>
                                     <img height="30px" alt="logo-thunderchain" src="/static/logo.png"/>
                                     &nbsp;

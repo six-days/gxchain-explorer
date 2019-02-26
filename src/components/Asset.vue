@@ -24,7 +24,7 @@
                                 <td>
                                     <img v-bind:src="'/static/'+coinSymbol+'-logo.png'" style="width: 18px;height: 18px;">
                                     &nbsp;
-                                    <router-link :to="{path:'/account/'+item.tradeAccount}">
+                                    <router-link :to="{path:'/asset/'+item.tradeAccount}">
                                         {{item.tradeAccount}}
                                     </router-link>
                                 </td>

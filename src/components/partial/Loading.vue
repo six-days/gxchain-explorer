@@ -1,7 +1,7 @@
 <template>
     <div class="load-box">
         <div class="loading">
-            <img src="/static/logo.png"/>
+            <img src="/static/wkc-logo.png"/>
         </div>
     </div>
 </template>

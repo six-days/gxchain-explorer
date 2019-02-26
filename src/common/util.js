@@ -61,21 +61,21 @@ export const coinList = [
     {
         'symbol': 'wkc',
         'name': '链克',
-        'supply': '100000000',
-        'contract': '0xead0edd69c479f3a81c2f1b8b36de118c6db8486'
+        'supply': '1,200,000,000(已减去销毁的3亿)',
+        'contract': '无合约地址'
     }, {
         'symbol': 'hgbc',
         'name': '碱基',
-        'supply': '100000000',
+        'supply': '3,000,000,000',
         'contract': '0xead0edd69c479f3a81c2f1b8b36de118c6db8486'
     }, {
         'symbol': 'lzt',
         'name': '懒钻',
-        'supply': '100000000',
-        'contract': '0xead0edd69c479f3a81c2f1b8b36de118c6db8486'
+        'supply': '1,000,000,000',
+        'contract': '0xd4d5dc30dd24e03ec1432efb28292aa975834a47'
     }, {
         'symbol': 'cjf',
         'name': '超积分',
-        'supply': '100000000',
-        'contract': '0xead0edd69c479f3a81c2f1b8b36de118c6db8486'
+        'supply': '250,000,000(可增发)',
+        'contract': '0x0e5fd8f5cf50ee91af25d57a4048ac73cb689f37'
     }];

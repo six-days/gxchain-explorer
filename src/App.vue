@@ -18,7 +18,6 @@
     import footer from './components/partial/Footer.vue';
     import { mapGetters } from 'vuex';
     export default {
-        name: 'app',
         computed: {
             ...mapGetters({
                 keywords: 'keywords',
@@ -27,6 +26,9 @@
         },
         watch: {
             keywords () {
+                this.keywordsChanged();
+            },
+            coinSymbol () {
                 this.keywordsChanged();
             }
         },

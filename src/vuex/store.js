@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 const state = {
     keywords: '',
-    coinSymbol: ''
+    coinSymbol: 'wkc'
 };
 
 const mutations = {

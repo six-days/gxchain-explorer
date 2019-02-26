@@ -3,9 +3,7 @@
         <div class="footer-outer">
             <div class="footer-inner">
                 <div class="text-center">
-                    @2018 - 2019 Powered by sixdays &nbsp;<a target='_blank' nofollow
-                                                  href="https://open.onethingcloud.com/"><span
-                        class="fa fa-lg fa-github"></span></a>
+                    @2018 - 2019 Powered by sixdays QQ：67001263&nbsp;
                 </div>
             </div>
         </div>

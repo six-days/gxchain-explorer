@@ -3,11 +3,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default panel-ranking"  v-if="rankings&&rankings.length>0">
+                <div class="panel panel-default panel-ranking">
                     <div class="panel-heading">
                         <span class="fa fa-fw gxicon gxicon-rank"></span>&nbsp;账号余额：<span class="label label-danger">{{coinBalance}}&nbsp;{{coinSymbol}}</span>，共<span class="label label-info">{{totleSupply}}</span>条交易
                     </div>
-                    <div class="pabel-body table-responsive no-padding">
+                    <div class="pabel-body table-responsive no-padding"  v-if="rankings&&rankings.length>0">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -46,11 +46,11 @@
                             </a>
                         </div>
                     </div>
+                    <div v-else v-show="!loading">
+                        <p class="null-tip">{{errormsg}}</p>
+                    </div>
                 </div>
-                <div v-else v-show="!loading">
-                    <h4 class="page-header">交易记录</h4>
-                    <p class="null-tip">{{errormsg}}</p>
-                </div>
+                
             </div>
         </div>
 
@@ -120,10 +120,11 @@
                 this.loadTransactions(1);
             },
             '$route' () {
-                if (this.$route.params.asset_name !== this.keywords) {
-                    this.loading = true;
-                    this.setKeywords({keywords: this.$route.params.asset_name});
-                }
+                this.loading = true;
+                if (this.coinSymbol === '') {
+                    this.coinSymbol = 'wkc';
+                };
+                this.setKeywords({keywords: this.$route.params.asset_name, coinSymbol: this.coinSymbol});
             }
         },
         computed: {
@@ -144,6 +145,10 @@
                     return tradeSymbole;
                 };
             }
+        },
+        mounted () {
+            this.loadBalance();
+            this.loadTransactions(1);
         }
     };
 </script>

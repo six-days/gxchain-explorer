@@ -2,24 +2,14 @@
     <header class="site-header">
         <nav class="navbar navbar-static-top main-navbar" id="top">
             <div class="container">
-                <div class="navbar-header">
-                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                            data-target="#bs-navbar"
-                            aria-controls="bs-navbar" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
                 <nav id="bs-navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#modal-about" data-toggle="modal">{{$t('header.about')}}</a></li>
+                        <li><a href="#modal-about" data-toggle="modal">关于</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">
-                                <img class="flagimg" :src="flagImg[$t('header.flag')]">
+                                <img class="flagimg" :src="flagImg['zh']">
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -28,10 +18,6 @@
                                          :src="flagImg['zh']">中文</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <!-- <li @click="switchLanguage('en')"><a href="javascript:;">
-                                    <img class="flagimg"
-                                         :src="flagImg['en']">English</a>
-                                </li> -->
                             </ul>
                         </li>
                     </ul>
@@ -71,7 +57,8 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
+    import { coinList } from '@/common/util';
 
     export default {
         data () {
@@ -86,17 +73,18 @@
                     'zh': require('../../../static/language-dropdown/img/CN.png'),
                     'en': require('../../../static/language-dropdown/img/US.png')
                 },
-                assets: [{'symbol': 'wkc', 'name': '链克'},
-                    {'symbol': 'hgbc', 'name': '碱基'},
-                    {'symbol': 'lzt', 'name': '懒钻'},
-                    {'symbol': 'cjf', 'name': '超积分'}
-                ]
+                assets: coinList
             };
         },
         watch: {
-            'keywords' () {
-                if (this.keywords !== this.search) {
+            keywords () {
+                if (this.search !== this.keywords) {
                     this.search = this.keywords;
+                }
+            },
+            coinSymbol () {
+                if (this.symbol !== this.coinSymbol && this.coinSymbol !== '') {
+                    this.symbol = this.coinSymbol;
                 }
             }
         },
@@ -114,6 +102,15 @@
             clearInput () {
                 this.setKeywords({keywords: '', coinSymbol: ''});
             }
+        },
+        mounted () {
+            this.search = this.$route.params.asset_name;
+        },
+        computed: {
+            ...mapGetters({
+                keywords: 'keywords',
+                coinSymbol: 'coinSymbol'
+            })
         }
     };
 </script>

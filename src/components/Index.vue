@@ -19,17 +19,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="asset in coinList" :key="asset.id">
+                            <tr v-for="asset in assets">
                                 <td>
-                                    <img height="30px" alt="logo-thunderchain" src="/static/logo.png"/>
+                                    <img v-bind:src="'/static/'+asset.symbol+'-logo.png'" style="width: 30px;">
                                     &nbsp;
-                                    <router-link :to="{path:`/asset/${asset.symbol}`}">{{asset.symbol}}</router-link>
+                                    <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.symbol}}</router-link>
                                 </td>
                                 <td>
-                                    <router-link :to="{path:`/account/${asset.contract}`}">{{asset.contract}}
+                                    <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.contract}}
                                     </router-link>
                                 </td>
-                                <td class="right">{{asset.supply}}</td>
+                                <td class="right"><span class="label label-danger">{{asset.supply}}</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -43,17 +43,12 @@
 </template>
 
 <script>
+    import { coinList } from '@/common/util';
     export default {
         data () {
             return {
                 assets_loading: false,
-                supportedAssets: ['wkc', 'hgbc', 'lzt', 'cjf'],
-                currentAsset: 'wkc',
-                assets: [{
-                    'symbol': 'wkc',
-                    'supply': '100000000',
-                    'contract': '0xead0edd69c479f3a81c2f1b8b36de118c6db8486'
-                }]
+                assets: coinList
             };
         }
     };
@@ -62,6 +57,11 @@
 <style scoped>
     .page-header {
         margin: 0 0 20px;
+    }
+
+    .label {
+        padding: 0.5em .7em .5em;
+        font-size: 100%;
     }
 
     .right {

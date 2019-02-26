@@ -64,7 +64,6 @@
                                         <th class="right">{{$t('index.transactions.time')}}</th>
                                     </tr>
                                     </thead>
-                                    <History_Op :latestTransactions="latestTransactions" parent="Account"></History_Op>
                                 </table>
                             </div>
                         </div>
@@ -82,7 +81,6 @@
     import { Apis } from 'gxbjs-ws';
     import { calc_block_time, get_assets_by_ids } from '@/services/CommonService';
     import filters from '@/filters';
-    import History_Op from './partial/History_Op.vue';
 
     export default {
         data () {
@@ -293,9 +291,6 @@
         },
         destroyed () {
             ChainStore.unsubscribe(this.onUpdate);
-        },
-        components: {
-            History_Op: History_Op
         }
     };
 </script>

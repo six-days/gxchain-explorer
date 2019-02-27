@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "prebuild": "npm run clear",
     "build": "node build/build.js"
   },
   "engines": {

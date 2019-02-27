@@ -62,7 +62,7 @@ export const coinList = [
         'symbol': 'wkc',
         'name': '链克',
         'supply': '1,200,000,000(已减去销毁的3亿)',
-        'contract': '无合约地址'
+        'contract': '0x0000000000000000000000000000000000000000'
     }, {
         'symbol': 'hgbc',
         'name': '碱基',

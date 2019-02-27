@@ -5,7 +5,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default panel-ranking">
                     <div class="panel-heading">
-                        <span class="fa fa-fw gxicon gxicon-rank"></span>&nbsp;账号余额：<span class="label label-danger">{{coinBalance}}&nbsp;{{coinSymbol}}</span>，共<span class="label label-info">{{totleSupply}}</span>条交易
+                        <img src="/static/Dollar.png">&nbsp;账号余额：<span class="label label-danger">{{coinBalance}}&nbsp;{{coinSymbol}}</span>，共<span class="label label-info">{{totleSupply}}</span>条交易
                     </div>
                     <div class="pabel-body table-responsive no-padding"  v-if="rankings&&rankings.length>0">
                         <table class="table table-striped">
@@ -42,7 +42,8 @@
                         </table>
                         <div class="footer" v-if="hasMore">
                             <a href="javascript:;" @click="loadTransactions(page+1)">
-                                <i class="fa fa-angle-double-down"></i>
+                                <!-- <i class="fa fa-angle-double-down"></i> -->
+                                <img src="/static/lu-icon-angle-double-down.png">
                             </a>
                         </div>
                     </div>

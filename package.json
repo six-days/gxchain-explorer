@@ -1,63 +1,31 @@
 {
-  "name": "gxb-explorer",
-  "version": "1.2.0",
-  "description": "gxchain explorer",
+  "name": "thunderChain-explorer",
+  "version": "1.0.0",
+  "description": "thunderChain explorer",
+  "author": "sixdays",
   "main": "index.js",
   "scripts": {
     "dev": "node build/dev-server.js",
-    "start": "nodemon server/index.js --exec babel-node --watch server",
-    "clear": "rm -rf dist server-dist",
+    "start": "node build/dev-server.js",
     "prebuild": "npm run clear",
-    "build": "webpack --progress --hide-modules --config build/webpack.server.config.js && node build/build.js",
-    "server": "NODE_ENV=production node server-dist/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gxchain/gxb-explorer.git"
+    "build": "node build/build.js"
   },
   "engines": {
     "node": ">= 6.0.0"
   },
   "keywords": [
-    "gxchain",
+    "thunderChain",
     "explorer"
   ],
-  "author": "davidlan",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gxchain/gxb-explorer/issues"
-  },
-  "homepage": "https://github.com/gxchain/gxb-explorer#readme",
   "dependencies": {
-    "async": "^2.5.0",
-    "bluebird": "^3.5.0",
-    "body-parser": "^1.18.3",
     "bootstrap": "^3.3.7",
-    "colors": "^1.1.2",
-    "cron": "^1.3.0",
-    "debug": "^2.2.0",
     "echarts": "^4.1.0",
-    "express": "^4.16.4",
-    "figlet": "^1.2.0",
-    "gscatterjs-core": "^0.1.2",
-    "gxbjs": "^1.3.12",
-    "hashjs": "^1.2.0",
-    "ipfs-api": "^20.0.1",
-    "jdenticon": "^1.8.0",
     "jquery": "^3.3.1",
-    "js-sha256": "^0.9.0",
-    "level": "^4.0.0",
-    "morgan": "^1.9.1",
-    "prismjs": "^1.6.0",
-    "superagent": "^4.0.0",
     "vue": "^2.3.3",
     "vue-echarts": "^3.0.9",
-    "vue-i18n": "^7.3.2",
     "vue-resource": "^1.3.4",
     "vue-router": "^2.6.0",
-    "vue-timeago": "^3.3.6",
-    "vuex": "^2.3.1",
-    "wabt": "^1.0.6"
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "@babel/runtime": "^7.2.0",

@@ -6,7 +6,7 @@
             <div class="col-md-14">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <span class="fa fa-fw gxicon gxicon-asset"></span> 迅雷链上资产
+                        迅雷链上资产
                     </div>
                     <div class="panel-body no-padding">
                         <Loading v-show="assets_loading"></Loading>
@@ -23,7 +23,7 @@
                                 <td>
                                     <img v-bind:src="'/static/'+asset.symbol+'-logo.png'" style="width: 30px;">
                                     &nbsp;
-                                    <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.symbol}}</router-link>
+                                    <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.name}}&nbsp;{{asset.symbol}}</router-link>
                                 </td>
                                 <td>
                                     <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.contract}}

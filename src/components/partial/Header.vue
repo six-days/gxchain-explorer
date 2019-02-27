@@ -120,7 +120,7 @@
         position: relative;
         text-align: center;
         background-color: #3c4463;
-        background-image: url("../../../static/banner.png");
+        background-image: url("../../../static/banner.jpg");
         background-position: 0 0;
         background-size: 100%;
         color: #fff;

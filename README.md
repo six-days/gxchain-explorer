@@ -10,7 +10,7 @@
 ## 克隆项目 Clone project
 
 ```
-git clone https://github.com/six-days/gxchain-explorer.git
+git clone https://github.com/six-days/thunderChain-explorer.git
 
 ```
 
@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-## 生产环境启动 Production environment start
+## 打包编译
 
 ```
 npm run build

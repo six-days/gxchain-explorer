@@ -16,7 +16,8 @@
                                 </div>
                                 <div class="panel-body">
                                     <h5>
-                                        合约地址：<router-link :to="{path:`/account/${assets.wkc.symbol}`}">{{assets.wkc.contract}}</router-link>
+                                        合约地址：
+                                        <router-link :to="{path:`/account/${assets.wkc.symbol}`}">{{assets.wkc.contract}}</router-link>
                                     </h5>
                                     <h5>
                                         发行量：<span class="label label-danger">{{assets.wkc.supply}}</span>
@@ -31,7 +32,8 @@
                                 </div>
                                 <div class="panel-body">
                                     <h5>
-                                        合约地址：<router-link :to="{path:`/account/${assets.hgbc.symbol}`}">{{assets.hgbc.contract}}</router-link>
+                                        合约地址：
+                                        <router-link :to="{path:`/account/${assets.hgbc.symbol}`}">{{assets.hgbc.contract}}</router-link>
                                     </h5>
                                     <h5>
                                         发行量：<span class="label label-danger">{{assets.hgbc.supply}}</span>
@@ -46,7 +48,8 @@
                                 </div>
                                 <div class="panel-body">
                                     <h5>
-                                        合约地址：<router-link :to="{path:`/account/${assets.lzt.symbol}`}">{{assets.lzt.contract}}</router-link>
+                                        合约地址：
+                                        <router-link :to="{path:`/account/${assets.lzt.symbol}`}">{{assets.lzt.contract}}</router-link>
                                     </h5>
                                     <h5>
                                         发行量：<span class="label label-danger">{{assets.lzt.supply}}</span>
@@ -61,7 +64,8 @@
                                 </div>
                                 <div class="panel-body">
                                     <h5>
-                                        合约地址：<router-link :to="{path:`/account/${assets.cjf.symbol}`}">{{assets.cjf.contract}}</router-link>
+                                        合约地址：
+                                        <router-link :to="{path:`/account/${assets.cjf.symbol}`}">{{assets.cjf.contract}}</router-link>
                                     </h5>
                                     <h5>
                                         发行量：<span class="label label-danger">{{assets.cjf.supply}}</span>

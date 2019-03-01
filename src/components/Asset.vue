@@ -1,12 +1,13 @@
 <template>
 
-    <div class="container">
+    <div class="container">        
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default panel-ranking">
                     <div class="panel-heading">
                         <img src="/static/Dollar.png">&nbsp;账号余额：<span class="label label-danger">{{coinBalance}}&nbsp;{{coinSymbol}}</span>，共<span class="label label-info">{{totleSupply}}</span>条交易
                     </div>
+                    <Loading v-show="loading"></Loading>
                     <div class="pabel-body table-responsive no-padding"  v-if="rankings&&rankings.length>0">
                         <table class="table table-striped">
                             <thead>
@@ -27,6 +28,7 @@
                                     <router-link :to="{path:'/asset/'+item.tradeAccount+'/'+coinSymbol}">
                                         {{item.tradeAccount}}
                                     </router-link>
+                                        <h6 style="color: #777676;"> {{item.hash}}</h6>
                                 </td>
                                 <td>
                                 <span data-toggle="tooltip" data-placement="bottom" :title="'收录区块信息 #' + item.blocknum" :class="tradeSymboleF(item.type).label">{{tradeSymboleF(item.type).title}}</span>
@@ -40,6 +42,7 @@
                             </tr>
                             </tbody>
                         </table>
+                        <Loading v-show="loading"></Loading>
                         <div class="footer" v-if="hasMore">
                             <a href="javascript:;" @click="loadTransactions(page+1)">
                                 <!-- <i class="fa fa-angle-double-down"></i> -->
@@ -87,6 +90,7 @@
                 });
             },
             loadTransactions (page) {
+                this.loading = true;
                 const pageSize = 10;
                 fetch_transaction(this.coinSymbol, this.$route.params.asset_name, page)
                 .then(resp => {
@@ -150,6 +154,9 @@
         mounted () {
             if (this.keywords === '') {
                 this.setKeywords({keywords: this.$route.params.asset_name, coinSymbol: this.$route.params.asset_symbole});
+            } else {
+                this.loadBalance();
+                this.loadTransactions(1);
             };
         }
     };

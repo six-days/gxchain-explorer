@@ -13,9 +13,7 @@
                     </div>
                     <div class="panel-heading">
                         创世地址：
-                        <router-link :to="{path:'/asset/'+asset.address+'/'+$route.params.id_or_name}">
-                          {{asset.address}}
-                        </router-link>
+                       <h5><router-link :to="{path:'/asset/'+asset.address+'/'+$route.params.id_or_name}">{{asset.address}}</router-link></h5>
 
                     </div>
                 </div>
@@ -26,7 +24,7 @@
                 <div class="col-md-6" >
                     <div class="panel panel-default panel-code">
                         <div class="panel-heading">
-                            <span class="fas fa-code"></span>&nbsp;合约代码
+                            &nbsp;合约代码
                         </div>
                         <div class="panel-body no-padding">
                             <div class="tab-content">
@@ -39,7 +37,7 @@
                 <div class="col-md-6">
                     <div class="panel panel-default panel-abi">
                         <div class="panel-heading">
-                            <span class="fas fa-angle-right"></span>&nbsp;合约ABI
+                            &nbsp;合约ABI
                         </div>
                         <div class="panel-body no-padding">
                             <div class="tab-content">

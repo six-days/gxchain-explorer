@@ -24,6 +24,19 @@
                 coinSymbol: 'coinSymbol'
             })
         },
+        watch: {
+            keywords () {
+                this.keywordsChanged();
+            },
+            coinSymbol () {
+                this.keywordsChanged();
+            }
+        },
+        methods: {
+            keywordsChanged () {
+                this.$router.push(`/asset/${this.keywords}/${this.coinSymbol}`);
+            }
+        },
         components: {
             vHeader: header,
             vFooter: footer,

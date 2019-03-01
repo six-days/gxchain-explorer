@@ -20,7 +20,7 @@ const router = new Router({
             component: Account
         },
         {
-            path: '/asset/:asset_name',
+            path: '/asset/:asset_name/:asset_symbole',
             name: 'Asset',
             component: Asset
         }

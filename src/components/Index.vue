@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="row">
-
             <!--Assets-->
             <div class="col-md-14">
                 <div class="panel panel-default">
@@ -10,33 +9,68 @@
                     </div>
                     <div class="panel-body no-padding">
                         <Loading v-show="assets_loading"></Loading>
-                        <table class="table table-striped no-margin" v-show="!assets_loading">
-                            <thead>
-                            <tr>
-                                <th>资产名称</th>
-                                <th>合约地址</th>
-                                <th class="right">发行总量</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="asset in assets">
-                                <td>
-                                    <img v-bind:src="'/static/'+asset.symbol+'-logo.png'" style="width: 30px;">
-                                    &nbsp;
-                                    <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.name}}&nbsp;{{asset.symbol}}</router-link>
-                                </td>
-                                <td>
-                                    <router-link :to="{path:`/account/${asset.symbol}`}">{{asset.contract}}
-                                    </router-link>
-                                </td>
-                                <td class="right"><span class="label label-danger">{{asset.supply}}</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-md-6" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <img v-bind:src="'/static/'+assets.wkc.symbol+'-logo.png'" style="width: 30px;">&nbsp;{{assets.wkc.name}}&nbsp;{{assets.wkc.symbol}}
+                                </div>
+                                <div class="panel-body">
+                                    <h5>
+                                        合约地址：<router-link :to="{path:`/account/${assets.wkc.symbol}`}">{{assets.wkc.contract}}</router-link>
+                                    </h5>
+                                    <h5>
+                                        发行量：<span class="label label-danger">{{assets.wkc.supply}}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <img v-bind:src="'/static/'+assets.hgbc.symbol+'-logo.png'" style="width: 30px;">&nbsp;{{assets.hgbc.name}}&nbsp;{{assets.hgbc.symbol}}
+                                </div>
+                                <div class="panel-body">
+                                    <h5>
+                                        合约地址：<router-link :to="{path:`/account/${assets.hgbc.symbol}`}">{{assets.hgbc.contract}}</router-link>
+                                    </h5>
+                                    <h5>
+                                        发行量：<span class="label label-danger">{{assets.hgbc.supply}}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <img v-bind:src="'/static/'+assets.lzt.symbol+'-logo.png'" style="width: 30px;">&nbsp;{{assets.lzt.name}}&nbsp;{{assets.lzt.symbol}}
+                                </div>
+                                <div class="panel-body">
+                                    <h5>
+                                        合约地址：<router-link :to="{path:`/account/${assets.lzt.symbol}`}">{{assets.lzt.contract}}</router-link>
+                                    </h5>
+                                    <h5>
+                                        发行量：<span class="label label-danger">{{assets.lzt.supply}}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <img v-bind:src="'/static/'+assets.cjf.symbol+'-logo.png'" style="width: 30px;">&nbsp;{{assets.cjf.name}}&nbsp;{{assets.cjf.symbol}}
+                                </div>
+                                <div class="panel-body">
+                                    <h5>
+                                        合约地址：<router-link :to="{path:`/account/${assets.cjf.symbol}`}">{{assets.cjf.contract}}</router-link>
+                                    </h5>
+                                    <h5>
+                                        发行量：<span class="label label-danger">{{assets.cjf.supply}}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -60,7 +94,7 @@
     }
 
     .label {
-        padding: 0.5em .7em .5em;
+        padding: 0.2em .5em .2em;
         font-size: 100%;
     }
 

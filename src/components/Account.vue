@@ -13,7 +13,7 @@
                     </div>
                     <div class="panel-heading">
                         创世地址：
-                        <router-link :to="{path:'/asset/'+asset.address}">
+                        <router-link :to="{path:'/asset/'+asset.address+'/'+$route.params.id_or_name}">
                           {{asset.address}}
                         </router-link>
 

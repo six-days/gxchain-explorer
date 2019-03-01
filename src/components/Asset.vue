@@ -24,7 +24,7 @@
                                 <td>
                                     <img v-bind:src="'/static/'+coinSymbol+'-logo.png'" style="width: 18px;height: 18px;">
                                     &nbsp;
-                                    <router-link :to="{path:'/asset/'+item.tradeAccount}">
+                                    <router-link :to="{path:'/asset/'+item.tradeAccount+'/'+coinSymbol}">
                                         {{item.tradeAccount}}
                                     </router-link>
                                 </td>
@@ -122,10 +122,10 @@
             },
             '$route' () {
                 this.loading = true;
-                if (this.coinSymbol === '') {
+                if (this.$route.params.asset_symbole === '') {
                     this.coinSymbol = 'wkc';
                 };
-                this.setKeywords({keywords: this.$route.params.asset_name, coinSymbol: this.coinSymbol});
+                this.setKeywords({keywords: this.$route.params.asset_name, coinSymbol: this.$route.params.asset_symbole});
             }
         },
         computed: {
@@ -148,8 +148,9 @@
             }
         },
         mounted () {
-            this.loadBalance();
-            this.loadTransactions(1);
+            if (this.keywords === '') {
+                this.setKeywords({keywords: this.$route.params.asset_name, coinSymbol: this.$route.params.asset_symbole});
+            };
         }
     };
 </script>

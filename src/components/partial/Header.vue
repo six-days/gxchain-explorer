@@ -37,7 +37,7 @@
                         <div class="input-group">
                              <div class="input-group-btn">
                                   <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                          {{coinName}}({{symbol}})&nbsp;<span class="caret"></span>
+                                          {{assets[symbol].name}}({{symbol}})&nbsp;<span class="caret"></span>
                                   </button>
                                   <ul class="dropdown-menu">
                                     <li v-for="item in assets" v-on:click="chooseChanged(item.symbol, item.name)"><a href="javascript:void(0);">{{item.name}}({{item.symbol}})</a></li>
@@ -85,6 +85,7 @@
             coinSymbol () {
                 if (this.symbol !== this.coinSymbol && this.coinSymbol !== '') {
                     this.symbol = this.coinSymbol;
+                    this.coinName = this.assets[this.symbol].name;
                 }
             }
         },

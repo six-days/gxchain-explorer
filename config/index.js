@@ -31,7 +31,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api.php': {
-                target: 'http://192.168.1.168/api.php/',
+                target: 'http://wkc.sixdays.me/api.php/',
                 changeOrigin: true,
                 pathRewrite: {
                 '^/api.php': ''

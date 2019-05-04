@@ -1,6 +1,39 @@
 <template>
     <div class="container">
         <div class="row">
+            <div class="col-md-14">
+                <div class="panel panel-default panel-ranking">
+                    <div class="panel-heading">
+                        <img src="/static/change.png" style="width: 6%">&nbsp;一周账户大500链克变动监控：
+                    </div>
+                    <div class="pabel-body table-responsive no-padding">
+
+                        <div class="col-md-4" v-for="(change,i) in wkcChanges">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <h5>
+                                        <router-link :to="
+                                        {path:'/asset/'+change.address+'/wkc'}">{{change.address}}</router-link>
+                                    </h5>
+                                    <h5>
+                                        <span class="label label-danger">{{change.pro_wkc}}</span>{{getChageLable(change.growth)}}<span class="label label-success">{{change.change}}</span>{{getChageLable(change.growth)}}><span class="label label-danger">{{change.now_wkc}}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <Loading v-show="changes_loading"></Loading>
+                        <div class="footer" v-if="hasMore">
+                            <a href="javascript:;" @click="loadWKCChage(page+1)">
+                                <!-- <i class="fa fa-angle-double-down"></i> -->
+                                <img src="/static/lu-icon-angle-double-down.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="row">
             <!--Assets-->
             <div class="col-md-14">
                 <div class="panel panel-default">
@@ -77,17 +110,103 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-14">
+                <div class="panel panel-default panel-ranking">
+                    <div class="panel-heading">
+                        <img src="/static/money.png" style="width: 8%">&nbsp;链克富豪榜TOP100：
+                    </div>
+                    <Loading v-show="assets_loading"></Loading>
+                    <div class="pabel-body table-responsive no-padding">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>地址</th>
+                                <th class="text-right">金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item,i) in wkcRanks">
+                                <td>{{i+1}}
+                                    <img src="/static/1.png" style="width: 50%" v-if="i==0">
+                                    <img src="/static/2.png" style="width: 50%" v-if="i==1">
+                                    <img src="/static/3.png" style="width: 50%" v-if="i==2">
+                                    
+                                </td>
+                                <td>
+                                    <router-link :to="{path:'/asset/'+item.address+'/wkc'}">
+                                        {{item.address}}
+                                    </router-link>
+                                </td>
+                                <td align="right">
+                                    <span class="label label-danger">{{item.wkc}}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import { coinList } from '@/common/util';
+    import { fetch_wck_rank, fetch_wck_change } from '@/services/CommonService';
     export default {
         data () {
             return {
-                assets_loading: false,
-                assets: coinList
+                assets_loading: true,
+                changes_loading: true,
+                page: 1,
+                hasMore: true,
+                assets: coinList,
+                wkcRanks: [],
+                wkcChanges: []
             };
+        },
+        methods: {
+            loadWKCRank () {
+                fetch_wck_rank()
+                .then(resp => {
+                    this.wkcRanks = resp.body.data;
+                    this.assets_loading = false;
+                }).catch(ex => {
+                    console.error(ex);
+                });
+            },
+            loadWKCChage (page) {
+                this.changes_loading = true;
+                fetch_wck_change(page)
+                .then(resp => {
+                    this.page = page;
+                    if (!resp.body.data || resp.body.data.length < 6) {
+                        this.hasMore = false;
+                    }
+                    this.wkcChanges = this.wkcChanges.concat(resp.body.data);
+                    this.changes_loading = false;
+                }).catch(ex => {
+                    console.error(ex);
+                });
+            }
+        },
+        mounted () {
+            this.loadWKCChage(1);
+            this.loadWKCRank();
+        },
+        computed: {
+            getChageLable (growth) {
+                return function (growth) {
+                    let tradeSymbole = '------';
+                    if (growth === 1) {
+                        tradeSymbole = '++++++';
+                    }
+                    return tradeSymbole;
+                };
+            }
         }
     };
 </script>

@@ -42,13 +42,13 @@
                             </tr>
                             </tbody>
                         </table>
-                        <Loading v-show="loading"></Loading>
                         <div class="footer" v-if="hasMore">
                             <a href="javascript:;" @click="loadTransactions(page+1)">
                                 <!-- <i class="fa fa-angle-double-down"></i> -->
                                 <img src="/static/lu-icon-angle-double-down.png">
                             </a>
                         </div>
+                        <Loading v-show="loading"></Loading>
                     </div>
                     <div v-else v-show="!loading">
                         <p class="null-tip">{{errormsg}}</p>
